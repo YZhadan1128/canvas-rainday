@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        let cv = document.querySelector("canvas")
+        let c = cv.getContext("2d")
+        let arr = []
+        let w = cv.width = window.innerWidth
+        let h = cv.height = window.innerHeight
+        c.fillStyle = "rgba(0,0,0,.8)"
+        c.strokeStyle = "rgba(174,194,224,0.5)"
+        for(let i = 0;i<300;i++){
+            arr.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                endx: -2 + Math.random()*4,
+                endy: Math.random()*10 +10,
+                l: Math.random()
+            })
+        }
+        window.onresize = function () {
+            // 当重新去设置宽高的时候, 会把所有canvas的样式 重置
+            w = cv.width = window.innerWidth;
+            h = cv.height = window.innerHeight;
+            c.strokeStyle = "rgba(174,194,224,0.5)";
+        };
+        function draw(){
+            c.clearRect(0,0,w,h)
+            c.rect(0,0,w,h)
+            c.fill()
+            for(let j = 0;j<arr.length;j++){
+                c.beginPath()
+                c.moveTo(arr[j].x,arr[j].y)
+                c.lineTo(arr[j].x+arr[j].l*arr[j].endx,arr[j].y+arr[j].l*arr[j].endy)
+                c.stroke()
+            }
+            move()
+        }
+        function move(){
+            for(let z = 0;z<arr.length;z++){
+                arr[z].x += arr[z].endx
+                arr[z].y +=arr[z].endy
+                if(arr[z].y>h ||arr[z].x>w){
+                    arr[z].y = -20
+                    arr[z].x = Math.random()*w
+                }
+            }
+        }
+        setInterval(draw,20)
+    </script>
+</body>
+</html>
